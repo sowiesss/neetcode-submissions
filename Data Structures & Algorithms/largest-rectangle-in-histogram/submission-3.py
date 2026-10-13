@@ -1,0 +1,17 @@
+class Solution:
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        n = len(heights)
+        stk = []
+        ma = 0
+        for i in range(n):
+            start = i
+            while stk and stk[-1][0] >= heights[i]:
+                h, ind = stk.pop() # h < heights[i], range of h calculated, remove h
+                ma = max((i - ind) * h, ma) # ind included
+                start = ind # save leftmost of heights[i]
+            stk.append((heights[i], start))
+
+        for h, s in stk:
+            ma = max(h * (n - s), ma) # n - 1 included
+
+        return ma
