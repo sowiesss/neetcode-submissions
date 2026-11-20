@@ -1,0 +1,38 @@
+class Solution:
+    def foreignDictionary(self, words: List[str]) -> str:
+        adj = {c : set() for w in words for c in w}
+
+        for i in range(len(words) - 1):
+            w1, w2 = words[i], words[i + 1]
+            minL = min(len(w1), len(w2))
+            if len(w1) > len(w2) and w1[:minL] == w2[:minL]:
+                return ""
+            for j in range(minL):
+                if w1[j] != w2[j]:
+                    adj[w1[j]].add(w2[j])
+                    break
+
+
+        visited = {}
+        res = []
+
+        def dfs(char):
+            if char in visited:
+                return visited[char]
+            
+            for nei in adj[char]:
+                if dfs(nei):
+                    return True
+
+            visited[char] = False
+            res.append(char)
+            return False
+
+        for char in adj:
+            if dfs(char):
+                return ""
+
+        res.reverse()
+        return "".join(res)
+
+        
